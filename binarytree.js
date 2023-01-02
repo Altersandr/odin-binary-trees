@@ -12,10 +12,11 @@ class Tree {
     }
 
     buildTree(array) {
-      let root;
+
       let left;
       let right;
       let mid;
+      if(array.length <1) return null
       if(array.length <=1) return new Node(array[0])
       else{
         let start = 0;
@@ -26,21 +27,54 @@ class Tree {
       }
         left = this.buildTree(left);
         right = this.buildTree(right);
-        return root = new Node(array[mid], left, right);
+        return new Node(array[mid], left, right);
     }
 
     insert(value) {
       let current = this.root;
-      console.log(current)
-      while(current.data){
+      let prev = null;
+      let node = new Node(value);
+      while(current){
         if(value < current.data){
-          current = current.left 
-        }else{
-        current = current.right
+          prev = current;
+          current = current.left
+        }
+        else if(value > current.data){
+          prev = current;
+          current = current.right;
         }
       }
-      current = new Node(value);
+      if(value < prev.data) prev.left = node;
+      else prev.right = node;
+
+        }
+
+    delete(value) {
+      let current = this.root;
+      let prev = null;
+      let side;
+      //i go inside the loop, my current is my root, check if the root value is
+      //bigger or smaller, if equal, set my current to null, 
+      //if smaller go left, else go right.
+      while(current){
+        // console.log(current)
+
+        if(value < current.data && current!=null){
+          prev = current;
+          current = current.left
+          side = "left";
+        }
+        else if(value > current.data && current!=null){
+          prev = current;
+          current = current.right;
+          side = "right"
+        }
+        if(value==current.data && side =="left") return prev.left = null;
+        else if(value==current.data && side =="right") return prev.right = null;
+      } 
     }
+      
+       
 
 };
 
@@ -56,8 +90,6 @@ function sortArray (array){
 
 const binaryTree = new Tree(sorted);
 
-// console.log(binaryTree.root.data)
-
 prettyPrint = (node, prefix = '', isLeft = true) => {
 
   if (node.right !== null) {
@@ -71,5 +103,15 @@ prettyPrint = (node, prefix = '', isLeft = true) => {
 
 // prettyPrint(binaryTree.root)
 
-binaryTree.insert(20);
-// prettyPrint(binaryTree.root)
+binaryTree.insert(24);
+binaryTree.insert(340);
+binaryTree.insert(25);
+binaryTree.insert(2);
+binaryTree.insert(100);
+binaryTree.insert(7754);
+prettyPrint(binaryTree.root)
+binaryTree.delete(25);
+binaryTree.delete(1);
+prettyPrint(binaryTree.root)
+
+
