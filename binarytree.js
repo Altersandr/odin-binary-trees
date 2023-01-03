@@ -129,18 +129,19 @@ class Tree {
       return result
     }
 
-    height(node, current = this.root){
-      let height = 0;
-      console.log(current)
-      if(current.data ==node) return height
-      else if(node<current.data) {
-        height+=1
-        return this.find(node, current.left)}
-      else 
-      { height+=1
-        return this.find(node, current.right)}
+    depth(node, current = this.root, depth = 0){
+
+      if(current.data == node) return depth
+      else if(node <current.data) return this.depth(node, current.left, depth+=1)
+      else return this.depth(node, current.right, depth+=1)
+ 
     }
-  
+    // height(node, height = 0){
+    //   let current = this.find(node);
+    //   let leftHeight;
+    //   if(current.left!==null) return leftHeight = this.height(current.left, height+=1)
+    //   return node;
+    // }
             
 };
 
