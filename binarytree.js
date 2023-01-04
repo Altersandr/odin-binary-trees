@@ -49,47 +49,41 @@ class Tree {
 
         }
 
-    delete(value) {
-      let current = this.root;
-      let prev = null;
-      let side;
-      let toRemove;
-      //i go inside the loop, my current is my root, check if the root value is
-      //bigger or smaller, if equal, set my current to null, 
-      //if smaller go left, else go right.
-      while(current){
-        // console.log(current)
-
-        if(value < current.data && current!=null){
-          prev = current;
-          current = current.left
-          side = "left";
-        }
-        else if(value > current.data && current!=null){
-          prev = current;
+    delete(value, current = this.root) {
+      
+      if(current ==null) return current
+      else if(value<current.data) current.left = this.delete(value, current.left);
+      else if(value>current.data) current.right = this.delete(value, current.right);
+      else{
+        if(current.left ==null && current.right == null){
+          current = null;
+        }else if(current.left == null){
           current = current.right;
-          side = "right"
+        }else if (current.right == null){
+          current = current.left;
         }else{
+          let temp = this.findMin(current.right);
+          current.data = temp.data;
+          current.right = this.delete(temp.data, current.right)
 
-          //to delete a node with 2 children you first go to the right of the node
-          //then recursively go to left to find the next just bigger node
-          //once you find it make that node the new parent of the children
-
-          if(value==current.data&&current.left!==null) return prev.left = current.left;
-          if(value==current.data&&current.right!==null) return prev.right = current.right;
-          if(value==current.data && side =="left") return prev.left = null;
-          else if(value==current.data && side =="right") return prev.right = null;
         }
-      } 
+      }
+      return current
     }
-
+    findMin(root){
+      while(root.left!==null) root = root.left;
+      return root;
+    }
+     
     find(value, current = this.root){
+        if(current ==null) return null
         if(current.data ==value) return current
         else if(value<current.data) return this.find(value, current.left)
         else return this.find(value, current.right)
+
     }
 
-    levelOrder(root){
+    levelOrder(root= this.root){
       if(root==null)return console.log(array)
       let array = []
       let queue = [];
@@ -102,10 +96,10 @@ class Tree {
         queue.shift()
       }
 
-      return console.log(array)
+      return array
     }
 
-    preorder(root, result = []){
+    preorder(root= this.root, result = []){
       if(root==null) return
       result.push(root.data)
       this.preorder(root.left, result)
@@ -113,18 +107,18 @@ class Tree {
       return result
     }
 
-    inorder(root, result = []){
+    inorder(root= this.root, result = []){
       if(root==null)return 
-      this.preorder(root.left, result)
+      this.inorder(root.left, result)
       result.push(root.data)
-      this.preorder(root.right, result)
+      this.inorder(root.right, result)
       return result
     }
 
-    postorder(root, result = []){
+    postorder(root= this.root, result = []){
       if(root==null)return 
-      this.preorder(root.left, result)
-      this.preorder(root.right, result)
+      this.postorder(root.left, result)
+      this.postorder(root.right, result)
       result.push(root.data)
       return result
     }
@@ -136,18 +130,41 @@ class Tree {
       else return this.depth(node, current.right, depth+=1)
  
     }
-    // height(node, height = 0){
-    //   let current = this.find(node);
-    //   let leftHeight;
-    //   if(current.left!==null) return leftHeight = this.height(current.left, height+=1)
-    //   return node;
-    // }
+    height(node, current = this.find(node)){
+
+      if(current == null) return 0
+      if(current.left==null && current.right ==null) return 0;
+
+      let leftHeight = this.height(node, current.left)
+      let rightHeight = this.height(node, current.right)
+
+      return Math.max(leftHeight, rightHeight)+1;
+    }
+
+    isBalanced(node = this.root){
+    
+      if(node==null) return 0;
+
+      let leftHeight = this.isBalanced(node.left);
+      if(leftHeight==-1) return -1;
+
+      let rightHeight = this.isBalanced(node.right);
+      if(rightHeight==-1) return -1;
+      if(Math.abs(leftHeight-rightHeight)>1)return -1
+      else return Math.max(leftHeight, rightHeight)+1
+
+    }
+
+    rebalance(){
+      const newTree = this.inorder(binaryTree.root)
+      binaryTree = new Tree(newTree)
+      prettyPrint(binaryTree.root);
+      return binaryTree
+    }
             
 };
 
 const ar =  [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
-
-const ar1 = [1, 2, 3, 4];
 
 const sorted = sortArray (ar);
 
@@ -155,7 +172,7 @@ function sortArray (array){
   return [...new Set (array.sort((a, b) => a < b ? -1 : 0))];
 }
 
-const binaryTree = new Tree(sorted);
+let binaryTree = new Tree(sorted);
 
 prettyPrint = (node, prefix = '', isLeft = true) => {
 
@@ -181,19 +198,26 @@ binaryTree.insert(97);
 binaryTree.insert(96);
 binaryTree.insert(200);
 binaryTree.insert(7754);
-prettyPrint(binaryTree.root)
-binaryTree.delete(23);
+// prettyPrint(binaryTree.root)
+// binaryTree.delete(23);
 // binaryTree.delete(1);
-binaryTree.delete(98);
+// binaryTree.delete(98);
 binaryTree.delete(200);
 
-binaryTree.preorder(binaryTree.root)
+// binaryTree.preorder(binaryTree.root)
 
-binaryTree.inorder(binaryTree.root)
+// binaryTree.inorder(binaryTree.root)
+// binaryTree.height(97);
 
 // binaryTree.levelOrder(binaryTree.root)
-prettyPrint(binaryTree.root)
+
+// binaryTree.rebalance();
+
+// binaryTree.isBalanced()
+// else console.log(false)
+
+// prettyPrint(binaryTree.root)
 
 
-
+module.exports 
 
