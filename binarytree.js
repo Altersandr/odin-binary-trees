@@ -152,8 +152,14 @@ class Tree {
       if(rightHeight==-1) return -1;
       if(Math.abs(leftHeight-rightHeight)>1)return -1
       else return Math.max(leftHeight, rightHeight)+1
-
     }
+
+    isItTrulyBalanced(){
+      if(this.isBalanced()>0) console.log("It's balanced")
+      else console.log('It\'s not balanced')
+    }
+
+
 
     rebalance(){
       const newTree = this.inorder(binaryTree.root)
@@ -185,39 +191,36 @@ prettyPrint = (node, prefix = '', isLeft = true) => {
   }
 };
 
-// prettyPrint(binaryTree.root)
 
-binaryTree.insert(24);
-binaryTree.insert(340);
-binaryTree.insert(25);
-binaryTree.insert(2);
-binaryTree.insert(100);
-binaryTree.insert(99);
-binaryTree.insert(98);
-binaryTree.insert(97);
-binaryTree.insert(96);
-binaryTree.insert(200);
-binaryTree.insert(7754);
-// prettyPrint(binaryTree.root)
-// binaryTree.delete(23);
-// binaryTree.delete(1);
-// binaryTree.delete(98);
-binaryTree.delete(200);
+//Print to console the initial tree
+prettyPrint(binaryTree.root)
+//Confirm the tree is balanced
 
-// binaryTree.preorder(binaryTree.root)
-
-// binaryTree.inorder(binaryTree.root)
-// binaryTree.height(97);
-
-// binaryTree.levelOrder(binaryTree.root)
-
-// binaryTree.rebalance();
-
-// binaryTree.isBalanced()
-// else console.log(false)
-
-// prettyPrint(binaryTree.root)
+binaryTree.isItTrulyBalanced()
 
 
-module.exports 
+console.log(binaryTree.levelOrder()); //outputs to the console an array, with the nodes in Breadth first order.
+console.log(binaryTree.preorder()); // outputs to the console an array, with nodes in Depth first pre order
+console.log(binaryTree.postorder()); // outputs to the console an array, with nodes in Depth first post order
+console.log(binaryTree.inorder()); // outputs to the console an array, with nodes in Depth first in order
 
+
+binaryTree.insert(101);
+binaryTree.insert(111);
+binaryTree.insert(121);
+binaryTree.insert(131);
+binaryTree.insert(112);
+binaryTree.insert(110);
+
+prettyPrint(binaryTree.root)
+
+binaryTree.isItTrulyBalanced()
+
+binaryTree.rebalance()
+
+binaryTree.isItTrulyBalanced()
+
+console.log(binaryTree.levelOrder());
+console.log(binaryTree.preorder()); 
+console.log(binaryTree.postorder()); 
+console.log(binaryTree.inorder());
